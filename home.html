@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="Images/favicon.png" type="image/x-icon">
+    <title>QuizMaker</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:regular,800">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:900">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:regular">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:regular,800">
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="scripts/jQuery.js"></script>
+    <script src="scripts/home.js" type="module"></script>
+</head>
+
+<body>
+    <div class="contenedorMensajes">
+        <div class="mensajeError">
+            <p></p>
+        </div>
+        <div class="mensajeAdvertencia">
+            <p></p>
+        </div>
+        <div class="mensajeCorrecto">
+            <p></p>
+        </div>
+    </div>
+    <div id="pantallaCrearQuizz">
+        <h1>Inicio</h1>
+        <div class="card">
+            <h2>¡CONSTRUYE TU PROPIO QUIZZ!</h2>
+            <div id="preguntasQuizz">
+                <div id="pregunta-1" class="pregunta">
+                    <h3>Pregunta 1</h3>
+                    <input class="contenedorPregunta pregunta-1" type="text" placeholder="Indica la pregunta">
+                    <div class="contenedorRespuestas">
+                        <input class="respuestas respuestaCorrecta" type="text" placeholder="Indica la respuesta correcta">
+                        <input class="respuestas" type="text" placeholder="Escribe una respuesta">
+                        <input class="respuestas" type="text" placeholder="Escribe una respuesta">
+                        <input class="respuestas" type="text" placeholder="Escribe una respuesta">
+                    </div>
+                    <div>
+                        <input class="explicacion" type="text"
+                            placeholder="Da una explicacion de porque esa es la respuesta correcta">
+                        <select name="" id="DificultadPregunta-1" class="dificultad">
+                            <option value="Facil">Facil</option>
+                            <option value="Medio">Medio</option>
+                            <option value="Dificil">Dificil</option>
+                        </select>
+                        <button class="eliminar pregunta-1">Eliminar pregunta</button>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+
+            <div>
+                <h3>Opciones para el quizz</h3>
+                <ul id="checks">
+                    <li>
+                        <input type="checkbox" name="" id="desordenarPreguntas"> Desordenar las preguntas
+                    </li>
+                    <li>
+                        <input type="checkbox" name="" id="prohibirComodines"> Prohibir los comodines
+                    </li>
+                    <li>
+                        <input type="checkbox" name="" id="expliacionPregunta"> Explicacion despues de cada pregunta
+                    </li>
+                    <li>
+                        <input type="checkbox" name="" id="dificultadPregunta"> Dificultad por cada pregunta
+                    </li>
+                    <li>
+                        <input type="checkbox" name="" id="tiempoParaContestar"> Tiempo para contestar una pregunta
+                    </li>
+                </ul>
+                <select name="" id="tiempoPregunta">
+                    <option value="15">15 segundos</option>
+                    <option value="30">30 segundos</option>
+                    <option value="45">45 segundos</option>
+                    <option value="60">60 segundos</option>
+                    <option value="120">120 segundos</option>
+                </select>
+            </div>
+            <div>
+                <button id="añadirPregunta">Añadir pregunta</button>
+                <button id="crearQuizz">Crear Quizz</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔎UNETE A UN QUIZZ🔍</h2>
+            <div>
+                <p style="font-weight: bold;">Introduce el codigo de la sala:</p>
+                <input id="codigoBuscar" type="text" placeholder="Ej: 000000">
+                <div>
+                    <button id="buscar">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

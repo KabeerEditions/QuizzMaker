@@ -1,0 +1,13 @@
+Copyright © 2025 Mohammad Kabeer
+
+Este proyecto está licenciado bajo los términos de la 
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0).
+
+Puedes ver, copiar y modificar el código con fines personales y educativos,
+siempre que proporciones atribución adecuada y NO lo utilices con fines comerciales.
+
+Está prohibido:
+- Usar este código para fines comerciales.
+- Redistribuirlo sin crédito al autor original.
+
+Licencia completa: https://creativecommons.org/licenses/by-nc/4.0/

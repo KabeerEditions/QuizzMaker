@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="Images/favicon.png" type="image/x-icon">
+    <title>QuizMaker</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:regular,800">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:900">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:regular">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:regular,800">
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="scripts/jQuery.js"></script>
+    <script src="scripts/quizz.js" type="module"></script>
+</head>
+
+<body>
+    <div class="contenedorMensajes">
+        <div class="mensajeError">
+            <p></p>
+        </div>
+        <div class="mensajeAdvertencia">
+            <p></p>
+        </div>
+        <div class="mensajeCorrecto">
+            <p></p>
+        </div>
+    </div>
+    <div id="preguntas">
+        <h1>Pregunta <span class="numeroPregunta">1</span>: <span class="pregunta">Pregunta</span></h1>
+        <div class="cronometro-container">
+            <p>Tiempo restante: <span id="cronometro">0</span> segundos</p>
+        </div>
+        <div class="comodin-container">
+            <button id="botonComodin">🧠 Usar comodín</button>
+        </div>
+
+        <div class="dificultad-indicador dificultad-Facil">
+            <span class="icono">★</span>
+            <span class="textoDificultad">Fácil</span>
+        </div>
+        <div class="respuestas card">
+            <button class="respuesta" id="respuesta-1">Respuesta 1</button>
+            <button class="respuesta" id="respuesta-2">Respuesta 2</button>
+            <button class="respuesta" id="respuesta-3">Respuesta 3</button>
+            <button class="respuesta" id="respuesta-4">Respuesta 4</button>
+        </div>
+        <p id="indicadorRespuestas" style="text-align: center; margin-top: 20px; font-size: 1.1rem;">
+            Faltan <span class="jugadoresFaltantes">0</span> jugadores por responder
+        </p>
+        <div class="botones">
+            <button id="siguiente1">Siguiente</button>
+        </div>
+        <div class="indicador-pregunta">Pregunta <span class="numeroPregunta">1</span> de <span
+                class="totalPreguntas">10</span></div>
+    </div>
+
+    <div id="pantallaEspera" style="display:none;">
+        <h2>Esperando a que todos respondan...</h2>
+        <div class="loader"></div>
+        <p>Por favor, espera un momento.</p>
+        <p id="indicadorRespuestas" style="text-align: center; margin-top: 20px; font-size: 1.1rem;">
+            Faltan <span class="jugadoresFaltantes">0</span> jugadores por responder
+        </p>
+    </div>
+
+    <div id="explicacion">
+        <h1>¡AQUI TIENES LA EXPLICACION!</h1>
+        <div class="card">
+            <p>La respuesta es esa porque...</p>
+        </div>
+        <div class="botones">
+            <button id="siguiente3">Siguiente</button>
+        </div>
+    </div>
+
+    <div id="ranking">
+        <h1>¡MIRA QUIEN VA GANANDO!</h1>
+        <div class="card Ranking">
+            <h2>MIRA EL RANKING</h2>
+        </div>
+        <div class="botones">
+            <button id="siguiente2">Siguiente</button>
+        </div>
+    </div>
+</body>
+
+</html>

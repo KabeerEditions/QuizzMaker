@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="Images/favicon.png" type="image/x-icon">
+    <title>QuizMaker</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:regular,800">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:900">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:regular">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:regular,800">
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="scripts/jQuery.js"></script>
+    <script src="scripts/ganadores.js" type="module"></script>
+</head>
+
+<body>
+    <div class="contenedorMensajes">
+        <div class="mensajeError">
+            <p></p>
+        </div>
+        <div class="mensajeAdvertencia">
+            <p></p>
+        </div>
+        <div class="mensajeCorrecto">
+            <p></p>
+        </div>
+    </div>
+    <div id="ganadores" class="card">
+        <h1>🎉 ¡Ganadores del Quizz! 🎉</h1>
+        <h2>Top 3 jugadores</h2>
+        <ul id="podio">
+            <li class="top1 rankingFinal">
+                🥇 <strong></strong> – <span class="puntos"></span> <span class="aciertos"></span>
+            </li>
+            <li class="top2 rankingFinal">
+                🥈 <strong></strong> – <span class="puntos"></span> <span class="aciertos"></span>
+            </li>
+            <li class="top3 rankingFinal">
+                🥉 <strong></strong> – <span class="puntos"></span> <span class="aciertos"></span>
+            </li>
+        </ul>
+
+        <hr class="restoRanking">
+
+        <h2 class="restoRanking">Resto del ranking</h2>
+        <ul>
+            <li class="rankingFinal">
+                4️⃣ <strong></strong> – <span class="puntos"></span> <span class="aciertos"></span>
+            </li>
+            <li class="rankingFinal">
+                5️⃣ <strong></strong> – <span class="puntos"></span> <span class="aciertos"></span>
+            </li>
+            <li class="rankingFinal">
+                6️⃣ <strong></strong> – <span class="puntos"></span> <span class="aciertos"></span>
+            </li>
+        </ul>
+
+        <div class="botones">
+            <button id="volverInicio">Volver al inicio</button>
+        </div>
+    </div>
+</body>
+
+</html>
