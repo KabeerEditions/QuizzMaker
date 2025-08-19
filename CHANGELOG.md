@@ -8,7 +8,7 @@ Todas las versiones importantes de QuizzMaker serán documentadas aquí.
 - Nueva dificultad: **Extremo**.
 - Dos nuevos comodines:
   - **50/50**: elimina dos respuestas incorrectas.
-  - **Todo o nada**: si aciertas te da el triple de puntos, pero si fallas te resta 1000 puntos.
+  - **Todo o nada**: si aciertas te da el triple de puntos, pero si fallas te resta 100 puntos.
 
 ### Cambiado
 - El bono por racha ya no es fijo (+20 puntos).  

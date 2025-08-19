@@ -379,7 +379,7 @@ $(function () {
 
         else {
             if (todoNada) {
-                await sumarPuntuacion(usuario, -1000);
+                await sumarPuntuacion(usuario, -100);
             }
             await updateDoc(referencia, {
                 [`aciertosSeguidos.${usuario}`]: 0,
