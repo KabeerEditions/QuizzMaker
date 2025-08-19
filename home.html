@@ -37,7 +37,8 @@
                     <h3>Pregunta 1</h3>
                     <input class="contenedorPregunta pregunta-1" type="text" placeholder="Indica la pregunta">
                     <div class="contenedorRespuestas">
-                        <input class="respuestas respuestaCorrecta" type="text" placeholder="Indica la respuesta correcta">
+                        <input class="respuestas respuestaCorrecta" type="text"
+                            placeholder="Indica la respuesta correcta">
                         <input class="respuestas" type="text" placeholder="Escribe una respuesta">
                         <input class="respuestas" type="text" placeholder="Escribe una respuesta">
                         <input class="respuestas" type="text" placeholder="Escribe una respuesta">
@@ -49,6 +50,7 @@
                             <option value="Facil">Facil</option>
                             <option value="Medio">Medio</option>
                             <option value="Dificil">Dificil</option>
+                            <option value="Extremo">Extremo</option>
                         </select>
                         <button class="eliminar pregunta-1">Eliminar pregunta</button>
                     </div>
@@ -60,19 +62,40 @@
                 <h3>Opciones para el quizz</h3>
                 <ul id="checks">
                     <li>
-                        <input type="checkbox" name="" id="desordenarPreguntas"> Desordenar las preguntas
+                        <div>
+                            <input type="checkbox" name="" id="desordenarPreguntas"> 
+                            <label for="desordenarPreguntas">Desordenar las preguntas</label>
+                        </div>
                     </li>
                     <li>
-                        <input type="checkbox" name="" id="prohibirComodines"> Prohibir los comodines
+                        <div>
+                            <input type="checkbox" name="" id="prohibirComodines"> 
+                            <label for="prohibirComodines">Permitir comodines</label>
+                        </div>
+                        <select name="cantidadComodines" id="cantidadComodines">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
                     </li>
                     <li>
-                        <input type="checkbox" name="" id="expliacionPregunta"> Explicacion despues de cada pregunta
+                        <div>
+                            <input type="checkbox" name="" id="expliacionPregunta">
+                            <label for="expliacionPregunta">Explicacion despues de cada pregunta</label>
+                        </div>
+
                     </li>
                     <li>
-                        <input type="checkbox" name="" id="dificultadPregunta"> Dificultad por cada pregunta
+                        <div>
+                            <input type="checkbox" name="" id="dificultadPregunta">
+                            <label for="dificultadPregunta">Dificultad por cada pregunta</label>
+                        </div>
                     </li>
                     <li>
-                        <input type="checkbox" name="" id="tiempoParaContestar"> Tiempo para contestar una pregunta
+                        <div>
+                            <input type="checkbox" name="" id="tiempoParaContestar">
+                            <label for="tiempoParaContestar">Tiempo para contestar una pregunta</label>
+                        </div>
                     </li>
                 </ul>
                 <select name="" id="tiempoPregunta">

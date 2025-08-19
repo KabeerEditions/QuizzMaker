@@ -2,6 +2,20 @@
 
 Todas las versiones importantes de QuizzMaker serán documentadas aquí.
 
+## [1.2.0] - 2025-08-19
+### Añadido
+- Sistema de uso de comodines dentro de las partidas.
+- Nueva dificultad: **Extremo**.
+- Dos nuevos comodines:
+  - **50/50**: elimina dos respuestas incorrectas.
+  - **Todo o nada**: si aciertas te da el triple de puntos, pero si fallas te resta 1000 puntos.
+
+### Cambiado
+- El bono por racha ya no es fijo (+20 puntos).  
+  Ahora la cantidad de puntos obtenidos varía según el número de respuestas consecutivas correctas.
+
+---
+
 ## [1.1.0] - 2025-07-18
 ### Añadido
 - Página README con descripción, enlace a la app y advertencias importantes.

@@ -254,7 +254,7 @@ hr {
   margin: 30px 0;
 }
 
-ul {
+ul#checks {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -264,9 +264,11 @@ ul {
   margin-top: 20px;
 }
 
-li {
+ul#checks li {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
   gap: 12px;
   background: rgba(255, 255, 255, 0.08);
   padding: 12px 18px;
@@ -278,8 +280,20 @@ li {
   transition: background 0.3s ease;
 }
 
-li:hover {
+ul#checks li:hover {
   background: rgba(255, 255, 255, 0.15);
+}
+
+ul#checks li div {
+  display: flex;
+}
+
+ul#checks li div label {
+  margin-left: 5px;
+}
+
+ul#checks li select {
+  margin-top: 0px;
 }
 
 input[type="checkbox"] {
@@ -707,6 +721,11 @@ select option {
   border: 2px solid #f87171;
 }
 
+.dificultad-Extremo {
+  color: #1f2937;
+  border: 2px solid #1f2937;
+}
+
 #siguiente1, #siguiente2, #siguiente3 {
   display: none;
 }
@@ -742,7 +761,7 @@ select option {
   margin: 10px 0 20px;
 }
 
-#botonComodin {
+.comodin {
   background: #ffbf00;
   color: #333;
   font-weight: 700;
@@ -755,12 +774,12 @@ select option {
   cursor: pointer;
 }
 
-#botonComodin:hover {
+.comodin:hover {
   background-color: #e0a800;
   transform: scale(1.05);
 }
 
-#botonComodin:active {
+.comodin:active {
   transform: scale(0.97);
 }
 

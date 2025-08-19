@@ -17,10 +17,20 @@ Puedes probar la aplicación desde el siguiente enlace:
 ## ⚠️ Aviso importante
 
 Cuando crees un nuevo quiz:
-- ✅ Asegúrate de **marcar la opción para prohibir los comodines**.
 - 🚫 No marques la opción para **desordenar las preguntas**.
 
 Esto es importante para que la experiencia de juego funcione correctamente.
+
+---
+
+## 🎲 Comodines disponibles
+
+Durante el juego, los jugadores pueden usar diferentes comodines para cambiar el rumbo de la partida:
+
+- **📉 50/50** → Elimina dos respuestas incorrectas, dejando solo una incorrecta y la correcta.
+- **🎲 Todo o nada** → Si aciertas, ganas el triple de puntos; si fallas, pierdes 1000 puntos.
+
+*(Los comodines pueden variar según la dificultad del quiz y las reglas configuradas por el creador).*
 
 ---
 

@@ -53,7 +53,7 @@ var listaDificultad = [];
 var codigo;
 const usuario = sessionStorage.getItem("usuario");
 
-var listaComodines = ["50/50"];
+var listaComodines = ["50/50", "Todo o nada"];
 
 /* 
    =====================================================
@@ -92,13 +92,9 @@ $(function () {
 
         if (camposRellenados) {
             mensaje("Creando partida...", "Correcto");
+
             $(".contenedorPregunta").each(function () {
                 listaPreguntas.push($(this).val());
-            });
-
-            $(".respuestaCorrecta").each(async function () {
-                var respuestaHasheada = await hashear($(this).val());
-                listaRespuestasCorrectas.push(respuestaHasheada);
             });
 
             $(".respuestas").each(function () {
@@ -115,7 +111,6 @@ $(function () {
             else {
                 for (var i = 0; i < listaPreguntas.length; i++) {
                     listaExplicaciones.push("");
-
                 }
             }
 
@@ -131,13 +126,18 @@ $(function () {
                 }
             }
 
+            $(".respuestaCorrecta").each(async function () {
+                var respuestaHasheada = await hashear($(this).val());
+                listaRespuestasCorrectas.push(respuestaHasheada);
+            });
+
             if (desordenarPreguntas) {
                 [listaPreguntas, listaRespuestasCorrectas, listaRespuestas, listaExplicaciones, listaDificultad] = mezclarLista(listaPreguntas, listaRespuestasCorrectas, listaRespuestas, listaExplicaciones, listaDificultad);
             }
 
             var tiempoPorCadaPregunta = Number($("#tiempoPregunta").val());
-
-            codigo = await crearSala(listaPreguntas, listaRespuestas, listaRespuestasCorrectas, listaExplicaciones, listaDificultad, tiempoPorCadaPregunta);
+            var numeroComodines = $("#cantidadComodines").val();
+            codigo = await crearSala(listaPreguntas, listaRespuestas, listaRespuestasCorrectas, listaExplicaciones, listaDificultad, tiempoPorCadaPregunta, numeroComodines);
 
             sessionStorage.setItem("codigoPartida", codigo);
             window.location.href = "salaEspera.html";
@@ -234,6 +234,7 @@ $(function () {
                             <option value="Facil">Facil</option>
                             <option value="Medio">Medio</option>
                             <option value="Dificil">Dificil</option>
+                            <option value="Extremo">Extremo</option>
                         </select>
                         <button class="eliminar pregunta-${preguntaNumero}">Eliminar pregunta</button>
                     </div>
@@ -261,7 +262,7 @@ $(function () {
 
     function comprobarChecks() {
         desordenarPreguntas = $("#desordenarPreguntas").is(":checked");
-        permitirComodines = !$("#prohibirComodines").is(":checked");
+        permitirComodines = $("#prohibirComodines").is(":checked");
         explicacionPregunta = $("#expliacionPregunta").is(":checked");
         dificultadPregunta = $("#dificultadPregunta").is(":checked");
         tiempoPregunta = $("#tiempoParaContestar").is(":checked");
@@ -273,7 +274,7 @@ $(function () {
         $(".explicacion").toggle(explicacionPregunta);
         $(".dificultad").toggle(dificultadPregunta);
         $("#tiempoPregunta").toggle(tiempoPregunta);
-
+        $("#cantidadComodines").toggle(permitirComodines);
     }
 
     function mezclarLista(lista1, lista2, lista3, lista4, lista5) {
@@ -312,7 +313,7 @@ $(function () {
         }
     }
 
-    async function crearSala(preguntas, respuestas, respuestasCorrectas, explicaciones, dificultades, tiempoContestar) {
+    async function crearSala(preguntas, respuestas, respuestasCorrectas, explicaciones, dificultades, tiempoContestar, cantidadComodines) {
         var salaExiste = true;
         var codigoGenerar;
         while (salaExiste) {
@@ -337,6 +338,7 @@ $(function () {
         await setDoc(referencia, {
             fechaCreacion: serverTimestamp(),
             permitirComodines: permitirComodines,
+            cantidadComodines: cantidadComodines,
             explicarPregunta: explicacionPregunta,
             mostrarDificultadPregunta: dificultadPregunta,
             existeTiempoContestar: tiempoPregunta,
@@ -395,13 +397,21 @@ $(function () {
                 mensaje("Entrando a la partida...", "Correcto");
                 if (!existePartida.jugadores.includes(usuario)) {
                     var referencia = doc(db, "quizz", codigoBuscar);
+                    var documento = await getDoc(referencia);
+                    var informacion = documento.data();
+                    var comodines = [];
+                    var comodinesUsados = [];
+                    for (var i = 0; i < informacion.cantidadComodines; i++) {
+                        comodines.push(listaComodines[numeroAleatorio(0, listaComodines.length - 1)]);
+                        comodinesUsados.push(false);
+                    }
                     await updateDoc(referencia, {
                         jugadores: arrayUnion(usuario),
                         [`puntaje.${usuario}`]: 0,
                         [`aciertos.${usuario}`]: 0,
                         [`aciertosSeguidos.${usuario}`]: 0,
-                        [`comodin.${usuario}`]: listaComodines[numeroAleatorio(0, listaComodines.length - 1)],
-                        [`comodinUsado.${usuario}`]: false,
+                        [`comodin.${usuario}`]: comodines,
+                        [`comodinesUsados.${usuario}`]: comodinesUsados,
                         [`respuestaJugador.${usuario}`]: ""
                     });
                 }

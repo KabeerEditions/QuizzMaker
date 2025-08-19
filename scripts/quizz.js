@@ -35,16 +35,49 @@ $(function () {
     var preguntaActual = 0;
     var estadoJuego = sessionStorage.getItem("estadoDelJuego");
     //var estadoJuego = "";
-    var explicacion = false;
+    //var explicacion = false;
     var haAcertado;
     var personasRespondieron = [];
     var mensajePoner = "";
     var tiempo;
     var mostrar = false;
+    var todoNada = false;
 
     const funcionesComodines = {
-        "50/50": () => {
+        "50/50": async () => {
+            var referencia = doc(db, "quizz", codigo);
+            var documento = await getDoc(referencia);
+            var informacion = documento.data();
+            var botones = $(".respuestas button").toArray();
+            botones = await Promise.all(
+                botones.map(async (btn) => {
+                    const hash = await hashear($(btn).text());
+                    return {
+                        id: $(btn).attr("id"),
+                        esCorrecta: hash == informacion.respuestasCorrectas[informacion.preguntaActual]
+                    };
+                })
+            );
+            var respuestasIncorrectas = [];
+            botones.forEach(({ id, esCorrecta }) => {
+                if (esCorrecta) {
+                    $(`#${id}`).addClass("comodin5050");
+                }
 
+                else {
+                    respuestasIncorrectas.push(id);
+                }
+            });
+            var posicionAleatoria = numeroAleatorio(0, respuestasIncorrectas.length - 1);
+            $(`#${respuestasIncorrectas[posicionAleatoria]}`).addClass("comodin5050");
+            respuestasIncorrectas.splice(posicionAleatoria, 1);
+            respuestasIncorrectas.forEach(function (elementoActual) {
+                $(`#${elementoActual}`).addClass("respuestaIncorrectaQuizz");
+            });
+        },
+
+        "Todo o nada": async () => {
+            todoNada = true;
         }
     }
 
@@ -128,8 +161,24 @@ $(function () {
        ===================================================== 
     */
 
-    $("#botonComodin").on("click", function () {
+    $(".comodin-container button").on("click", async function () {
+        var referencia = doc(db, "quizz", codigo);
+        var documento = await getDoc(referencia);
+        var informacion = documento.data();
+        var posicion = $(this).index();
+        if (posicion >= 0 && posicion <= 2 && !informacion.personasRespondido.includes(usuario)) {
+            if (informacion.comodinesUsados[usuario[posicion]]) {
+                funcionesComodines[informacion.comodin[usuario[posicion]]]();
+            }
 
+            else {
+                mensaje("Este comodin ya ha sido usado", "Error");
+            }
+        }
+
+        else {
+            mensaje("Ha ocurrido un error", "Error");
+        }
     });
 
     /* 
@@ -146,7 +195,7 @@ $(function () {
             if (preguntaActual != datos.preguntaActual + 1 && !datos.juegoPausado) {
                 preguntaActual = datos.preguntaActual + 1;
                 $(".numeroPregunta").text(datos.preguntaActual + 1);
-                $(".pregunta").text(datos.preguntas[datos.preguntaActual])
+                $(".pregunta").text(datos.preguntas[datos.preguntaActual]);
 
                 var respuestaPoner = datos.preguntaActual * 4;
                 var posicionesAleatorias = [1, 2, 3, 4];
@@ -160,6 +209,7 @@ $(function () {
                 if (datos.mostrarDificultadPregunta) {
                     $(".textoDificultad").text(datos.dificultades[datos.preguntaActual]);
                     $(".dificultad-indicador").attr("class", `dificultad-indicador dificultad-${datos.dificultades[datos.preguntaActual]}`);
+                    $(".icono").text(datos.dificultades[datos.preguntaActual] != "Extremo" ? "★" : "💀");
                 }
             }
 
@@ -170,6 +220,7 @@ $(function () {
                 mostrar = true;
                 $(".respuestaCorrectaQuizz").removeClass("respuestaCorrectaQuizz");
                 $(".respuestaIncorrectaQuizz").removeClass("respuestaIncorrectaQuizz");
+                $(".comodin5050").removeClass("comodin5050");
                 estadoJuego = "responiendo";
                 sessionStorage.setItem("estadoDelJuego", estadoJuego);
                 if (!datos.personasRespondido.includes(usuario)) {
@@ -257,7 +308,6 @@ $(function () {
     }
 
     async function comprobacionesPartida(codigoComprobar) {
-
         var referencia = doc(db, "quizz", codigoComprobar);
         var documento = await getDoc(referencia);
         var informacion = documento.data();
@@ -277,22 +327,19 @@ $(function () {
             }
         }
 
-        if (!informacion.permitirComodines || informacion.admin == usuario) {
-            $(".comodin-container").remove();
-        }
-
-        else {
-            $("#botonComodin").text(informacion.comodin[usuario]);
+        if (informacion.permitirComodines && informacion.admin != usuario) {
+            for (var i = 1; i < informacion.cantidadComodines; i++) {
+                $(".comodin-container").append(`<button class="comodin">
+                    ${informacion.comodin[usuario][i - 1]}
+                    </button>`);
+            }
         }
 
         if (informacion.admin == usuario) {
             $("#siguiente1, #siguiente2, #siguiente3").show();
         }
     }
-    /*
-    IMPORTANTE: cambiar el sistema que uso para el cronometro, mejor que pase el tiempo y luego ya actualizo en vez de ir 
-    actualizando a cada rato
-    */
+
     async function cronometro() {
         var referencia = doc(db, "quizz", codigo);
         var documento = await getDoc(referencia);
@@ -331,6 +378,9 @@ $(function () {
         }
 
         else {
+            if (todoNada) {
+                await sumarPuntuacion(usuario, -1000);
+            }
             await updateDoc(referencia, {
                 [`aciertosSeguidos.${usuario}`]: 0,
                 jugadoresMal: arrayUnion(usuario),
@@ -394,9 +444,12 @@ $(function () {
         var documento = await getDoc(referencia);
         var informacion = documento.data();
         mensajePoner = "";
-        if (informacion.personasRespondido.includes(usuario) && !informacion.personasPuntuadas.includes(usuario) && haAcertado) {
+        if (informacion.personasRespondido.includes(usuario) && !informacion.personasPuntuadas.includes(usuario)) {
             var puntuacion = Math.max(20, 100 - (10 * (informacion.personasRespondido.length - 1)));
-
+            if (todoNada) {
+                puntuacion = puntuacion * 3;
+                todoNada = false;
+            }
             await updateDoc(referencia, {
                 personasPuntuadas: arrayUnion(usuario)
             });
@@ -508,7 +561,8 @@ $(function () {
 
         if (personaConLaRacha == usuario && aciertosSeguidos[usuario] > 0) {
             mensajePoner = `y actualmente tú eres el jugador con la mejor racha (${aciertosSeguidos[usuario]})`;
-            sumarPuntuacion(usuario, 20);
+            var puntosSumar = 20 * rachaMasAlta;
+            sumarPuntuacion(usuario, puntosSumar);
         }
     }
 
