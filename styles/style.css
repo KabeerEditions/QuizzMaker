@@ -471,6 +471,108 @@ select option {
   border: 2px solid #fff;
 }
 
+#ganadores.card {
+  background: rgba(30, 30, 40, 0.5); /* Gris oscuro con transparencia */
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(120, 90, 250, 0.6);
+  text-align: center;
+}
+
+/* Ajuste de espaciado dentro del li */
+#podio li,
+#ganadores ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  margin: 0.5rem 0;
+  border-radius: 12px;
+  font-weight: bold;
+  transition: transform 0.2s, box-shadow 0.2s;
+  max-width: 500px;
+  min-width: 300px;
+  gap: 0.6rem; /* Añade espacio entre los elementos dentro del li */
+}
+
+/* Para nombres y emoji */
+#podio li strong,
+#ganadores ul li strong {
+  margin-left: 0.3rem; /* Pequeño espacio tras el emoji */
+  text-overflow: ellipsis; /* Si es muy largo, recorta */
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Si quieres que la puntuación también se vea mejor en móvil */
+@media (max-width: 480px) {
+  #podio li,
+  #ganadores ul li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    max-width: 90%;
+  }
+
+  .puntuacion {
+    justify-content: flex-start;
+  }
+}
+
+#ganadores ul li:not(.top1):not(.top2):not(.top3) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Resto del ranking */
+.restoRanking {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+/* Botón volver */
+#ganadores .botones {
+  margin-top: 1.5rem;
+}
+
+#ganadores button#volverInicio {
+  background: linear-gradient(135deg, #ff6a00, #ee0979);
+  border: none;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#ganadores button#volverInicio:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Títulos */
+#ganadores h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+#ganadores h2 {
+  font-size: 1.5rem;
+  margin: 1rem 0 0.5rem;
+}
+
+#podio {
+  display: flex;
+  justify-content: center;
+}
+
 .eliminar {
   background: linear-gradient(135deg, #ff6b6b, #ff4e50); /* Rojo degradado moderno */
   color: #fff;

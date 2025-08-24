@@ -78,6 +78,17 @@ $(function () {
 
         "Todo o nada": async () => {
             todoNada = true;
+        },
+
+        "Sabotaje": async () => {
+            var referencia = doc(db, "quizz", codigo);
+            var documento = await getDoc(referencia);
+            var informacion = documento.data();
+            for (var i = 0; informacion.jugadores.length - 1; i++) {
+                if (informacion.jugadores[i] != usuario) {
+                    sumarPuntuacion(informacion.jugadores[i], -100);
+                }
+            }
         }
     }
 
@@ -160,15 +171,20 @@ $(function () {
        Apartado: Usar comodin
        ===================================================== 
     */
-
-    $(".comodin-container button").on("click", async function () {
+    $(document).on("click", ".comodin", async function () {
         var referencia = doc(db, "quizz", codigo);
         var documento = await getDoc(referencia);
         var informacion = documento.data();
         var posicion = $(this).index();
         if (posicion >= 0 && posicion <= 2 && !informacion.personasRespondido.includes(usuario)) {
-            if (informacion.comodinesUsados[usuario[posicion]]) {
-                funcionesComodines[informacion.comodin[usuario[posicion]]]();
+            var comodinesUsuario = informacion.comodin[usuario];
+            var comodinesUsadosUsuario = informacion.comodinesUsados[usuario];
+            if (!comodinesUsadosUsuario[posicion]) {
+                funcionesComodines[comodinesUsuario[posicion]]();
+                comodinesUsadosUsuario[posicion] = true;
+                await updateDoc(referencia, {
+                    [`comodinesUsados.${usuario}`]: comodinesUsadosUsuario
+                });
             }
 
             else {
@@ -179,6 +195,8 @@ $(function () {
         else {
             mensaje("Ha ocurrido un error", "Error");
         }
+
+        $(this).remove();
     });
 
     /* 
@@ -328,7 +346,7 @@ $(function () {
         }
 
         if (informacion.permitirComodines && informacion.admin != usuario) {
-            for (var i = 1; i < informacion.cantidadComodines; i++) {
+            for (var i = 1; i <= informacion.cantidadComodines; i++) {
                 $(".comodin-container").append(`<button class="comodin">
                     ${informacion.comodin[usuario][i - 1]}
                     </button>`);

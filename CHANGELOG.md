@@ -2,6 +2,19 @@
 
 Todas las versiones importantes de QuizzMaker serán documentadas aquí.
 
+## [1.2.1] - 2025-08-24
+### Añadido
+- Nuevos comodines:
+  - **Sabotaje**: Permite eliminar 100 puntos a los demas jugadores.
+
+### Cambiado
+- La pantalla final de los ganadores tiene otro estilo.
+
+### Arreglado
+- Al generar los comodines ponia 1 menos, ahora pone todos los comodines que tienes.
+
+---
+
 ## [1.2.0] - 2025-08-19
 ### Añadido
 - Sistema de uso de comodines dentro de las partidas.

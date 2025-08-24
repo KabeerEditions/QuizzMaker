@@ -53,7 +53,7 @@ var listaDificultad = [];
 var codigo;
 const usuario = sessionStorage.getItem("usuario");
 
-var listaComodines = ["50/50", "Todo o nada"];
+var listaComodines = ["50/50", "Todo o nada", "Sabotaje"];
 
 /* 
    =====================================================
