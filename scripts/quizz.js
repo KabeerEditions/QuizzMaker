@@ -33,6 +33,7 @@ $(function () {
     */
 
     var preguntaActual = 0;
+    var preguntaUsadoComodin;
     var estadoJuego = sessionStorage.getItem("estadoDelJuego");
     //var estadoJuego = "";
     //var explicacion = false;
@@ -40,11 +41,12 @@ $(function () {
     var personasRespondieron = [];
     var mensajePoner = "";
     var tiempo;
-    var mostrar = false;
     var todoNada = false;
+    var mostrarMensaje = true;
 
     const funcionesComodines = {
         "50/50": async () => {
+            preguntaUsadoComodin = preguntaActual;
             var referencia = doc(db, "quizz", codigo);
             var documento = await getDoc(referencia);
             var informacion = documento.data();
@@ -86,7 +88,7 @@ $(function () {
             var informacion = documento.data();
             for (var i = 0; informacion.jugadores.length - 1; i++) {
                 if (informacion.jugadores[i] != usuario) {
-                    sumarPuntuacion(informacion.jugadores[i], -100);
+                    await sumarPuntuacion(informacion.jugadores[i], -100);
                 }
             }
         }
@@ -171,7 +173,7 @@ $(function () {
        Apartado: Usar comodin
        ===================================================== 
     */
-    $(document).on("click", ".comodin", async function () {
+    $(document).on("click", ".comodin, .comodinUsado", async function () {
         var referencia = doc(db, "quizz", codigo);
         var documento = await getDoc(referencia);
         var informacion = documento.data();
@@ -195,8 +197,8 @@ $(function () {
         else {
             mensaje("Ha ocurrido un error", "Error");
         }
-
-        $(this).remove();
+        $(this).removeClass("comodin");
+        $(this).addClass("comodinUsado");
     });
 
     /* 
@@ -235,11 +237,13 @@ $(function () {
                 if (datos.admin == usuario) {
                     $("#siguiente1").show();
                 }
-                mostrar = true;
-                $(".respuestaCorrectaQuizz").removeClass("respuestaCorrectaQuizz");
-                $(".respuestaIncorrectaQuizz").removeClass("respuestaIncorrectaQuizz");
-                $(".comodin5050").removeClass("comodin5050");
+
+                if (preguntaUsadoComodin != preguntaActual) {
+                    $(".comodin5050").removeClass("comodin5050");
+                }
+
                 estadoJuego = "responiendo";
+                mostrarMensaje = true;
                 sessionStorage.setItem("estadoDelJuego", estadoJuego);
                 if (!datos.personasRespondido.includes(usuario)) {
                     $("#pantallaEspera, #explicacion, #ranking").hide();
@@ -277,8 +281,9 @@ $(function () {
                 if (!datos.puntuadoPersonaRacha) {
                     calcularPersonaConRacha(datos.jugadores, datos.aciertosSeguidos);
                 }
-                if (usuario != datos.admin && estadoJuego != "mostrarRanking") {
+                if (usuario != datos.admin && estadoJuego != "mostrarRanking" && mostrarMensaje) {
                     mostrarMensajeAcierto(datos.personasRespondido);
+                    mostrarMensaje = false;
                 }
 
                 if (estadoJuego != "mostrarRanking" && datos.revelarRespuesta) {
@@ -294,23 +299,6 @@ $(function () {
                     mensaje("No has elejido ninguna opcion asi que no se te sumara ningun punto y tu racha se reiniciara", "Advertencia");
                 }
                 colocarJugadoresRanking(codigo);
-                if (mostrar) {
-                    mostrar = false;
-                    setTimeout(async function () {
-                        var documento = await getDoc(referencia);
-                        var informacion = documento.data();
-                        console.log(informacion.preguntaActual + 1);
-                        for (var i = 0; i < informacion.jugadoresMal.length; i++) {
-                            if (informacion.jugadoresMal[i] != "Ger_demo") {
-                                console.log(`El jugador ${informacion.jugadoresMal[i]} respondio mal (${informacion.respuestaJugador[informacion.jugadoresMal[i]]})`);
-                            }
-
-                            else {
-                                $("La perra del Gerard respondio mal, no sabe leer (${informacion.respuestaJugador[informacion.jugadoresMal[i]]})")
-                            }
-                        }
-                    }, 3000);
-                }
             }
 
             else if (datos.estadoJuego == "finalizado") {
@@ -321,7 +309,6 @@ $(function () {
                     window.location.href = "ganadores.html";
                 }
             }
-
         });
     }
 
@@ -346,8 +333,10 @@ $(function () {
         }
 
         if (informacion.permitirComodines && informacion.admin != usuario) {
+            var comodinesUsados = informacion.comodinesUsados[usuario];
             for (var i = 1; i <= informacion.cantidadComodines; i++) {
-                $(".comodin-container").append(`<button class="comodin">
+                var claseComodin = !comodinesUsados[i - 1] ? "comodin" : "comodinUsado"
+                $(".comodin-container").append(`<button class=${claseComodin}>
                     ${informacion.comodin[usuario][i - 1]}
                     </button>`);
             }
@@ -545,11 +534,12 @@ $(function () {
     }
 
     function mostrarMensajeAcierto(personasQueRespondieron) {
+        /*
         if (isNaN(haAcertado)) {
             mostrarRespuesta(personasQueRespondieron);
-        }
+        }*/
 
-        else if (haAcertado) {
+        if (haAcertado) {
             mensaje("Enhorabuena, tu respuesta era correcta" + mensajePoner, "Correcto");
         }
 
@@ -580,11 +570,14 @@ $(function () {
         if (personaConLaRacha == usuario && aciertosSeguidos[usuario] > 0) {
             mensajePoner = `y actualmente tú eres el jugador con la mejor racha (${aciertosSeguidos[usuario]})`;
             var puntosSumar = 20 * rachaMasAlta;
-            sumarPuntuacion(usuario, puntosSumar);
+            await sumarPuntuacion(usuario, puntosSumar);
         }
     }
 
     async function mostrarRespuesta(pantallaMostrar, pantallaActual) {
+        $(".comodin5050").removeClass("comodin5050");
+        $(".respuestaCorrectaQuizz").removeClass("respuestaCorrectaQuizz");
+        $(".respuestaIncorrectaQuizz").removeClass("respuestaIncorrectaQuizz");
         var referencia = doc(db, "quizz", codigo);
         var documento = await getDoc(referencia);
         var informacion = documento.data();

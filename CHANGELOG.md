@@ -2,6 +2,14 @@
 
 Todas las versiones importantes de QuizzMaker serán documentadas aquí.
 
+## [1.2.2] - 2025-08-27
+
+### Arreglado
+- El mensaje de acierto o fallo se mostraba varias, ahora se muestra 1 vez
+- Ahora se pueden usar los comodines, antes no se podia correctamente y si usabas algunos comodines no funcionaban correctamente.
+
+---
+
 ## [1.2.1] - 2025-08-24
 ### Añadido
 - Nuevos comodines:

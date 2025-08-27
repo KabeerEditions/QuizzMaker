@@ -885,6 +885,30 @@ select option {
   transform: scale(0.97);
 }
 
+.comodinUsado {
+  background: #999; /* gris apagado */
+  color: #fff; 
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border: none;
+  cursor: not-allowed; /* indica que no se puede usar */
+  opacity: 0.7;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* desactivo hover y active para que no cambie */
+.comodinUsado:hover {
+  background: #999;
+  transform: none;
+}
+
+.comodinUsado:active {
+  transform: none;
+}
+
 #pantallaEspera {
   display: flex;
   flex-direction: column;
