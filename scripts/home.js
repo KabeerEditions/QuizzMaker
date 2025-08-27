@@ -91,6 +91,11 @@ $(function () {
         });
 
         if (camposRellenados) {
+            listaPreguntas = [];
+            listaRespuestas = [];
+            listaRespuestasCorrectas = [];
+            listaExplicaciones = [];
+            listaDificultad = [];
             mensaje("Creando partida...", "Correcto");
 
             $(".contenedorPregunta").each(function () {
@@ -126,10 +131,11 @@ $(function () {
                 }
             }
 
-            $(".respuestaCorrecta").each(async function () {
-                var respuestaHasheada = await hashear($(this).val());
+
+            for (var elem of $(".respuestaCorrecta")) {
+                var respuestaHasheada = await hashear($(elem).val());
                 listaRespuestasCorrectas.push(respuestaHasheada);
-            });
+            }
 
             if (desordenarPreguntas) {
                 [listaPreguntas, listaRespuestasCorrectas, listaRespuestas, listaExplicaciones, listaDificultad] = mezclarLista(listaPreguntas, listaRespuestasCorrectas, listaRespuestas, listaExplicaciones, listaDificultad);
@@ -278,10 +284,11 @@ $(function () {
     }
 
     function mezclarLista(lista1, lista2, lista3, lista4, lista5) {
-        console.log(lista1);
+        /*console.log(lista1);
         console.log(lista2);
+        console.log(lista3);
         console.log(lista4);
-        console.log(lista5);
+        console.log(lista5);*/
         if (lista1.length == lista2.length && lista1.length == lista4.length && lista1.length == lista5.length) {
             var listaBarrejada1 = []; //Lista de las preguntas
             var listaBarrejada2 = []; //Lista de las respuestas correctas
@@ -299,17 +306,17 @@ $(function () {
                 lista2.splice(posicionAleatoria, 1);
                 lista4.splice(posicionAleatoria, 1);
                 lista5.splice(posicionAleatoria, 1);
-                for (var i = 0; i <= 4; i++) {
-                    listaBarrejada3.push(lista3[posicionAleatoria]);
-                    lista3.splice(posicionAleatoria, 1);
+                var posicionEmpezar = posicionAleatoria * 4;
+                for (var i = 0; i < 4; i++) {
+                    listaBarrejada3.push(lista3[posicionEmpezar]);
+                    lista3.splice(posicionEmpezar, 1);
                 }
             }
-
             return [listaBarrejada1, listaBarrejada2, listaBarrejada3, listaBarrejada4, listaBarrejada5];
         }
 
         else {
-            mensaje("Ha ocurrido un error, vuelve a intentalo y si sigue fallando no dude en reportal el error", "Error");
+            mensaje("Ha ocurrido un error, vuelve a intentarlo y, si sigue fallando, no dude en reportar el error", "Error");
         }
     }
 
@@ -321,8 +328,8 @@ $(function () {
             codigoGenerar = String(codigoGenerar);
             salaExiste = await comprobarPartidaExiste(codigoGenerar);
         }
-        /*
-        console.log(permitirComodines);
+
+        /*console.log(permitirComodines);
         console.log(explicacionPregunta);
         console.log(dificultadPregunta);
         console.log(tiempoPregunta);
@@ -332,8 +339,8 @@ $(function () {
         console.log(respuestasCorrectas);
         console.log(explicaciones);
         console.log(dificultades);
-        console.log(usuario);
-        */
+        console.log(usuario);*/
+
         var referencia = doc(db, "quizz", codigoGenerar);
         await setDoc(referencia, {
             fechaCreacion: serverTimestamp(),
@@ -351,6 +358,12 @@ $(function () {
             explicaciones: explicaciones,
             dificultades: dificultades,
             jugadores: [],
+            cantidadVotos: {
+                "1": 0,
+                "2": 0,
+                "3": 0,
+                "4": 0
+            },
             puntaje: {},
             aciertos: {},
             aciertosSeguidos: {},

@@ -12,24 +12,13 @@ Puedes probar la aplicación desde el siguiente enlace:
 
 🔗 [https://quizmaker-99237.web.app/](https://quizmaker-99237.web.app/)
 
----
-
-## ⚠️ Aviso importante
-
-Cuando crees un nuevo quiz:
-- 🚫 No marques la opción para **desordenar las preguntas**.
-
-Esto es importante para que la experiencia de juego funcione correctamente.
-
----
-
 ## 🎲 Comodines disponibles
 
 Durante el juego, los jugadores pueden usar diferentes comodines para cambiar el rumbo de la partida:
 
 - **📉 50/50** → Elimina dos respuestas incorrectas, dejando solo una incorrecta y la correcta.
 - **🎲 Todo o nada** → Si aciertas, ganas el triple de puntos; si fallas, pierdes 100 puntos.
-- **Sabotaje** → Permite eliminar 100 puntos a los demas jugadores.
+- **💣Sabotaje** → Permite eliminar 100 puntos a los demas jugadores.
 
 ---
 

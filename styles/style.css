@@ -570,7 +570,9 @@ select option {
 
 #podio {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .eliminar {
@@ -936,4 +938,18 @@ select option {
 .aciertos {
   font-weight: 300;
   font-size: 12px;
+}
+
+/* Contador dentro de cada respuesta */
+.respuestasTotal {
+  background: rgba(0, 0, 0, 0.25); /* fondo semitransparente */
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 12px;
+  margin-left: 8px; /* separación del texto */
+  min-width: 24px;
+  text-align: center;
+  display: inline-block;
 }

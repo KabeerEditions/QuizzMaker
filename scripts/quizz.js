@@ -39,6 +39,7 @@ $(function () {
     //var explicacion = false;
     var haAcertado;
     var personasRespondieron = [];
+    var posicionPreguntas = [];
     var mensajePoner = "";
     var tiempo;
     var todoNada = false;
@@ -115,8 +116,14 @@ $(function () {
             $("#pantallaEspera").show();
             if (!informacion.personasRespondido.includes(usuario)) {
                 haAcertado = NaN;
-                var respuestaHasheada = await hashear($(this).text());
-                haAcertado = await comprobarRespuesta(respuestaHasheada, $(this).text());
+                var id = $(this).attr("id");
+                var respuestaHasheada = await hashear($(`#${id} span.respuesta`).text());
+                haAcertado = await comprobarRespuesta(respuestaHasheada, $(`#${id} span.respuesta`).text());
+                var posicion = id.split("-");
+                var respuestaPosicion = posicionPreguntas.indexOf(Number(posicion[1])) + 1
+                await updateDoc(referencia, {
+                    [`cantidadVotos.${respuestaPosicion}`]: increment(1)
+                });
             }
 
             else {
@@ -216,16 +223,17 @@ $(function () {
                 preguntaActual = datos.preguntaActual + 1;
                 $(".numeroPregunta").text(datos.preguntaActual + 1);
                 $(".pregunta").text(datos.preguntas[datos.preguntaActual]);
-
                 var respuestaPoner = datos.preguntaActual * 4;
                 var posicionesAleatorias = [1, 2, 3, 4];
+                posicionPreguntas = [];
                 for (var i = 1; i <= 4; i++) {
                     var posicionAleatoria = numeroAleatorio(0, posicionesAleatorias.length - 1);
-                    $(`#respuesta-${posicionesAleatorias[posicionAleatoria]}`).text(datos.respuestas[respuestaPoner]);
+                    posicionPreguntas.push(posicionesAleatorias[posicionAleatoria]);
+                    $(`#respuesta-${posicionesAleatorias[posicionAleatoria]} .respuesta`).text(`${datos.respuestas[respuestaPoner]}`);
+                    $(`#respuesta-${posicionesAleatorias[posicionAleatoria]} .respuestasTotal`).text(`0`);
                     respuestaPoner++;
                     posicionesAleatorias.splice(posicionAleatoria, 1);
                 }
-
                 if (datos.mostrarDificultadPregunta) {
                     $(".textoDificultad").text(datos.dificultades[datos.preguntaActual]);
                     $(".dificultad-indicador").attr("class", `dificultad-indicador dificultad-${datos.dificultades[datos.preguntaActual]}`);
@@ -428,6 +436,12 @@ $(function () {
             await updateDoc(referencia, {
                 [`aciertosSeguidos.${usuario}`]: 0,
                 jugadoresMal: [],
+                cantidadVotos: {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 0
+                }
             });
         }
 
@@ -586,7 +600,9 @@ $(function () {
             $("#pantallaEspera, #ranking, #explicacion, #siguiente1").hide();
             $("#preguntas").show();
             $(".respuestas button").each(async function () {
-                var respuestaComprobar = await hashear($(this).text());
+                var id = $(this).attr("id");
+                console.log(id)
+                var respuestaComprobar = await hashear($(`#${id} span.respuesta`).text());
                 if (respuestaComprobar == informacion.respuestasCorrectas[informacion.preguntaActual]) {
                     $(this).addClass("respuestaCorrectaQuizz");
                 }
@@ -594,6 +610,10 @@ $(function () {
                     $(this).addClass("respuestaIncorrectaQuizz");
                 }
             });
+            var votos = informacion.cantidadVotos;
+            for (var i = 1; i <= 4; i++) {
+                $(`#respuesta-${posicionPreguntas[i - 1]} .respuestasTotal`).text(votos[i]);
+            }
             if (estadoJuego != pantallaMostrar) {
                 setTimeout(async function () {
                     documento = await getDoc(referencia);

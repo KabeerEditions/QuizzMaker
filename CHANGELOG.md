@@ -2,10 +2,21 @@
 
 Todas las versiones importantes de QuizzMaker serán documentadas aquí.
 
+## [1.2.3] - 2025-08-27
+
+### Añadido
+- Se muestra la cantidad de jugadores que han respondido cada pregunta.
+
+### Arreglado
+- La opción de **mezclar preguntas** ya se puede activar correctamente.
+- La pantalla final del podio fue arreglada: ahora los jugadores se muestran de forma horizontal.
+
+---
+
 ## [1.2.2] - 2025-08-27
 
 ### Arreglado
-- El mensaje de acierto o fallo se mostraba varias, ahora se muestra 1 vez
+- El mensaje de acierto o fallo se mostraba varias, ahora se muestra 1 vez.
 - Ahora se pueden usar los comodines, antes no se podia correctamente y si usabas algunos comodines no funcionaban correctamente.
 
 ---
