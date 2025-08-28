@@ -911,6 +911,48 @@ select option {
   transform: none;
 }
 
+.comodinEsperando {
+  background: linear-gradient(135deg, #ffbf00 0%, #ffd84d 100%);
+  color: #444;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 1rem;
+  border: none;
+  cursor: not-allowed;
+  opacity: 0.8;
+  box-shadow: 0 0 12px rgba(255, 191, 0, 0.3), inset 0 0 6px rgba(255, 191, 0, 0.4);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animación tipo “pulso” suave */
+.comodinEsperando::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
 #pantallaEspera {
   display: flex;
   flex-direction: column;

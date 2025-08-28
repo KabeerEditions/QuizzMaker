@@ -19,6 +19,7 @@ Durante el juego, los jugadores pueden usar diferentes comodines para cambiar el
 - **📉 50/50** → Elimina dos respuestas incorrectas, dejando solo una incorrecta y la correcta.
 - **🎲 Todo o nada** → Si aciertas, ganas el triple de puntos; si fallas, pierdes 100 puntos.
 - **💣Sabotaje** → Permite eliminar 100 puntos a los demas jugadores.
+- **🪽Segunda oportunidad** → Si fallas una pregunta, te permite contestar de nuevo.
 
 ---
 

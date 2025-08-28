@@ -2,6 +2,14 @@
 
 Todas las versiones importantes de QuizzMaker serán documentadas aquí.
 
+## [1.2.4] - 2025-08-28
+
+### Añadido
+- Nuevos comodines:
+  - **Segunda oportunidad**: Si fallas una pregunta, te permite contestar de nuevo.
+
+---
+
 ## [1.2.3] - 2025-08-27
 
 ### Añadido

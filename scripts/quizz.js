@@ -43,7 +43,11 @@ $(function () {
     var mensajePoner = "";
     var tiempo;
     var todoNada = false;
+    var segundaOportunidad = false;
+    var posicionSegundaOportunidad;
     var mostrarMensaje = true;
+    var claseComodinAñadir;
+    var desactivarComodin;
 
     const funcionesComodines = {
         "50/50": async () => {
@@ -92,6 +96,18 @@ $(function () {
                     await sumarPuntuacion(informacion.jugadores[i], -100);
                 }
             }
+        },
+
+        "Segunda oportunidad": async () => {
+            if (!segundaOportunidad) {
+                claseComodinAñadir = "comodinEsperando";
+                desactivarComodin = false;
+                segundaOportunidad = true;
+            }
+
+            else {
+                mensaje("El comodin ya esta en uso", "Error");
+            }
         }
     }
 
@@ -119,11 +135,15 @@ $(function () {
                 var id = $(this).attr("id");
                 var respuestaHasheada = await hashear($(`#${id} span.respuesta`).text());
                 haAcertado = await comprobarRespuesta(respuestaHasheada, $(`#${id} span.respuesta`).text());
-                var posicion = id.split("-");
-                var respuestaPosicion = posicionPreguntas.indexOf(Number(posicion[1])) + 1
-                await updateDoc(referencia, {
-                    [`cantidadVotos.${respuestaPosicion}`]: increment(1)
-                });
+                console.log(haAcertado);
+                if (!segundaOportunidad || haAcertado) {
+                    segundaOportunidad = false;
+                    var posicion = id.split("-");
+                    var respuestaPosicion = posicionPreguntas.indexOf(Number(posicion[1])) + 1
+                    await updateDoc(referencia, {
+                        [`cantidadVotos.${respuestaPosicion}`]: increment(1)
+                    });
+                }
             }
 
             else {
@@ -181,6 +201,8 @@ $(function () {
        ===================================================== 
     */
     $(document).on("click", ".comodin, .comodinUsado", async function () {
+        claseComodinAñadir = "comodinUsado";
+        desactivarComodin = true;
         var referencia = doc(db, "quizz", codigo);
         var documento = await getDoc(referencia);
         var informacion = documento.data();
@@ -189,8 +211,11 @@ $(function () {
             var comodinesUsuario = informacion.comodin[usuario];
             var comodinesUsadosUsuario = informacion.comodinesUsados[usuario];
             if (!comodinesUsadosUsuario[posicion]) {
-                funcionesComodines[comodinesUsuario[posicion]]();
-                comodinesUsadosUsuario[posicion] = true;
+                await funcionesComodines[comodinesUsuario[posicion]]();
+                if (segundaOportunidad) {
+                    posicionSegundaOportunidad = posicion;
+                }
+                comodinesUsadosUsuario[posicion] = desactivarComodin;
                 await updateDoc(referencia, {
                     [`comodinesUsados.${usuario}`]: comodinesUsadosUsuario
                 });
@@ -205,7 +230,7 @@ $(function () {
             mensaje("Ha ocurrido un error", "Error");
         }
         $(this).removeClass("comodin");
-        $(this).addClass("comodinUsado");
+        $(this).addClass(claseComodinAñadir);
     });
 
     /* 
@@ -380,27 +405,44 @@ $(function () {
         var referencia = doc(db, "quizz", codigo);
         var documento = await getDoc(referencia);
         var informacion = documento.data();
-        await updateDoc(referencia, {
-            personasRespondido: arrayUnion(usuario)
-        });
         if (respuesta == informacion.respuestasCorrectas[informacion.preguntaActual]) {
             await updateDoc(referencia, {
                 [`aciertos.${usuario}`]: increment(1),
-                [`aciertosSeguidos.${usuario}`]: increment(1)
+                [`aciertosSeguidos.${usuario}`]: increment(1),
+                personasRespondido: arrayUnion(usuario)
             });
-            calcularPuntuacion();
+            await calcularPuntuacion();
+            segundaOportunidad = false;
+            $(".comodinEsperando").addClass("comodin");
+            $(".comodinEsperando").removeClass("comodinEsperando");
             return true;
         }
 
         else {
-            if (todoNada) {
-                await sumarPuntuacion(usuario, -100);
+            if (!segundaOportunidad) {
+                if (todoNada) {
+                    await sumarPuntuacion(usuario, -100);
+                }
+                await updateDoc(referencia, {
+                    [`aciertosSeguidos.${usuario}`]: 0,
+                    jugadoresMal: arrayUnion(usuario),
+                    [`respuestaJugador.${usuario}`]: respuestaSinHash,
+                    personasRespondido: arrayUnion(usuario)
+                });
             }
-            await updateDoc(referencia, {
-                [`aciertosSeguidos.${usuario}`]: 0,
-                jugadoresMal: arrayUnion(usuario),
-                [`respuestaJugador.${usuario}`]: respuestaSinHash
-            });
+
+            else {
+                mensaje(`Tu respuesta estaba mal, el comodin "Segunda oportunidad" te ha salvado, elije bien en esta ocasion`, "Advertencia");
+                var comodinesUsadosUsuario = informacion.comodinesUsados[usuario];
+                comodinesUsadosUsuario[posicionSegundaOportunidad] = true;
+                $(".comodinEsperando").addClass("comodinUsado");
+                $(".comodinEsperando").removeClass("comodinEsperando");
+                await updateDoc(referencia, {
+                    [`comodinesUsados.${usuario}`]: comodinesUsadosUsuario
+                });
+                $("#pantallaEspera").hide();
+                $("#preguntas").show();
+            }
             return false;
         }
     }
@@ -601,7 +643,6 @@ $(function () {
             $("#preguntas").show();
             $(".respuestas button").each(async function () {
                 var id = $(this).attr("id");
-                console.log(id)
                 var respuestaComprobar = await hashear($(`#${id} span.respuesta`).text());
                 if (respuestaComprobar == informacion.respuestasCorrectas[informacion.preguntaActual]) {
                     $(this).addClass("respuestaCorrectaQuizz");
