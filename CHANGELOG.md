@@ -8,6 +8,9 @@ Todas las versiones importantes de QuizzMaker serán documentadas aquí.
 - Nuevos comodines:
   - **Segunda oportunidad**: Si fallas una pregunta, te permite contestar de nuevo.
 
+### Arreglado
+- El comodin **Sabotaje** tenia un error en el codigo que ha sido arreglado.
+
 ---
 
 ## [1.2.3] - 2025-08-27

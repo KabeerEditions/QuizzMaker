@@ -91,7 +91,7 @@ $(function () {
             var referencia = doc(db, "quizz", codigo);
             var documento = await getDoc(referencia);
             var informacion = documento.data();
-            for (var i = 0; informacion.jugadores.length - 1; i++) {
+            for (var i = 0; i < informacion.jugadores.length - 1; i++) {
                 if (informacion.jugadores[i] != usuario) {
                     await sumarPuntuacion(informacion.jugadores[i], -100);
                 }
